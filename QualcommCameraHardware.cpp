@@ -4804,3 +4804,314 @@ status_t QualcommCameraHardware::getBufferInfo(sp<IMemory>& Frame, size_t *align
 }
 
 }; // namespace android
+
+int camera_get_number_of_cameras(void)
+{
+    LOGE("%s", __FUNCTION__);
+	return 1;
+}
+
+
+
+int camera_get_camera_info(int camera_id, struct camera_info *info)
+{
+
+    info->facing =  CAMERA_FACING_BACK;
+    info->orientation = 90;
+     LOGE("%s", __FUNCTION__);
+
+    return 0;
+
+
+}
+
+int camera_device_open(const hw_module_t* module, const char* name, hw_device_t** device)
+{
+
+	// Make sure we always have a reference to this lib
+	//dlHandle = ::dlopen("liboemcamera.so", RTLD_NOW);
+
+	tmpObj = android::QualcommCameraHardware::createInstance();
+	camObj = android::QualcommCameraHardware::getInstance();
+	camera_device_t* camera_device = NULL;
+	camera_device_ops_t* camera_ops = NULL;
+
+	camera_device = (camera_device_t*)malloc(sizeof(*camera_device));
+	camera_ops = (camera_device_ops_t*)malloc(sizeof(*camera_ops));
+	memset(camera_device, 0, sizeof(*camera_device));
+	memset(camera_ops, 0, sizeof(*camera_ops));
+
+	camera_device->common.tag = HARDWARE_DEVICE_TAG;
+	camera_device->common.version = 0;
+	camera_device->common.module = (hw_module_t *)(module);
+	camera_device->common.close = camera_device_close;
+	camera_device->ops = camera_ops;	
+	
+	camera_ops->set_preview_window = camera_set_preview_window;
+	camera_ops->start_preview = camera_start_preview;
+	camera_ops->auto_focus = camera_auto_focus;
+	camera_ops->cancel_auto_focus = camera_cancel_auto_focus;
+	camera_ops->take_picture = camera_take_picture;
+	camera_ops->cancel_picture = camera_cancel_picture;
+	camera_ops->set_callbacks = camera_set_callbacks;
+	camera_ops->enable_msg_type = camera_enable_msg_type;
+	camera_ops->disable_msg_type = camera_disable_msg_type;
+	camera_ops->msg_type_enabled = camera_msg_type_enabled;
+	camera_ops->stop_preview = camera_stop_preview;
+	camera_ops->preview_enabled = camera_preview_enabled;
+	camera_ops->store_meta_data_in_buffers = camera_store_meta_data_in_buffers;
+	camera_ops->start_recording = camera_start_recording;
+	camera_ops->stop_recording = camera_stop_recording;
+	camera_ops->recording_enabled = camera_recording_enabled;
+	camera_ops->release_recording_frame = camera_release_recording_frame;
+ 
+
+	camera_ops->set_parameters = camera_set_parameters;
+	camera_ops->get_parameters = camera_get_parameters;
+	camera_ops->put_parameters = camera_put_parameters;
+	camera_ops->send_command = camera_send_command;
+	camera_ops->release = camera_release;
+	camera_ops->dump = camera_dump;
+
+
+
+	camera_ops->send_command = camera_send_command;
+	*device = &camera_device->common;
+	
+
+	return 0;
+}
+
+int camera_device_close(hw_device_t* device)
+{	
+    LOGE("%s", __FUNCTION__);
+	//dlclose(dlHandle);
+	
+	return 0;
+}
+
+int camera_set_preview_window(struct camera_device * device, struct preview_stream_ops *window)
+{
+	LOGE("%s", __FUNCTION__);
+
+
+	if(!device)
+			LOGE("%s : No device!", __FUNCTION__);
+	if(!window)
+	{
+			LOGE("%s : No window...creating", __FUNCTION__);
+
+		preview_stream_ops_t* preview = NULL;
+
+		preview = (preview_stream_ops_t*)malloc(sizeof(*preview));
+		memset(preview, 0, sizeof(*preview));
+		
+		preview->dequeue_buffer = camera_dequeue_buffer;
+		preview->enqueue_buffer = camera_enqueue_buffer;
+		preview->cancel_buffer = camera_cancel_buffer;
+		preview->set_buffer_count = camera_set_buffer_count;
+		preview->set_buffers_geometry = camera_set_buffers_geometry;
+		preview->set_crop = camera_set_crop;
+		preview->set_usage = camera_set_usage;
+		preview->set_swap_interval = camera_set_swap_interval;
+		preview->get_min_undequeued_buffer_count = camera_get_min_undequeued_buffer_count;
+		preview->lock_buffer = camera_lock_buffer;
+	
+		window = preview;
+	}
+
+
+	return 0;
+
+}
+
+int camera_start_preview(struct camera_device * device)
+{
+	LOGD("%s", __FUNCTION__);
+	return camObj->startPreview();
+	return 0;
+	
+}
+
+char* camera_get_parameters(struct camera_device * device)
+{
+		LOGD("%s", __FUNCTION__);
+		 android::String8 flattened = camObj->getParameters().flatten();
+		 char * toSend = (char*)malloc(sizeof(char) *  flattened.size());
+		 strcpy(toSend, flattened.string());
+		 return toSend;
+		
+		
+}
+void camera_put_parameters(struct camera_device *device, char *parms)
+{
+	LOGE("%s : %s", __FUNCTION__, parms);
+	//free(parms);
+}
+int camera_set_parameters(struct camera_device * device, const char *params)
+{
+	LOGD("%s", __FUNCTION__);
+	android::String8 parms(params);
+	android::CameraParameters settings(parms);
+	
+	camObj->setParameters(settings);
+	return 0;
+}
+int camera_send_command(struct camera_device * device, int32_t cmd, int32_t arg1, int32_t arg2)
+{
+	LOGE(  "%s : %d %d %d", __FUNCTION__, cmd, arg1, arg2 );
+	return 0;
+}
+
+void camera_stop_preview(struct camera_device * device)
+{
+	LOGD("%s", __FUNCTION__);
+	return camObj->stopPreview();
+	
+
+}
+int camera_auto_focus(struct camera_device * device)
+{
+	LOGD("%s", __FUNCTION__);
+	camObj->autoFocus();
+	return 0;
+}
+int camera_cancel_auto_focus(struct camera_device * device)
+{
+	LOGD("%s", __FUNCTION__);
+	camObj->cancelAutoFocus();
+	return 0;
+}
+int camera_take_picture(struct camera_device * device)
+{
+	LOGD("%s", __FUNCTION__);
+	camObj->takePicture();
+	return 0;
+}
+static int camera_cancel_picture(struct camera_device * device)
+{
+	LOGD("%s", __FUNCTION__);
+	camObj->cancelPicture();
+	return 0;	
+}
+void camera_set_callbacks(struct camera_device * device, camera_notify_callback notify_cb,    camera_data_callback data_cb,       camera_data_timestamp_callback data_cb_timestamp,        camera_request_memory get_memory,        void *user)
+{
+	LOGE("%s: notify_cb: %p, data_cb: %p, data_cb_timestamp: %p, get_memory: %p, user :%p", __FUNCTION__, notify_cb, data_cb, data_cb_timestamp, get_memory, user);
+	
+	camObj->setCallbacks(device,notify_cb,data_cb,data_cb_timestamp,get_memory,user);
+}
+int camera_preview_enabled(struct camera_device * device)
+{
+	
+	
+	LOGD("%s", __FUNCTION__);
+	
+	return camObj->previewEnabled() ? 1 : 0;
+	return 1;
+}
+void camera_enable_msg_type(struct camera_device * device, int32_t msg_type)
+{
+	LOGD("%s : %d", __FUNCTION__, msg_type);
+	camObj->enableMsgType(msg_type);
+}
+void camera_disable_msg_type(struct camera_device * device, int32_t msg_type)
+{
+	LOGD("%s", __FUNCTION__);
+	camObj->disableMsgType(msg_type);
+}
+int camera_msg_type_enabled(struct camera_device * device, int32_t msg_type)
+{
+	LOGD("%s", __FUNCTION__);
+	return (int)camObj->msgTypeEnabled(msg_type);
+}
+void camera_release(struct camera_device * device)
+{
+	LOGD("%s", __FUNCTION__);
+	camObj->release();
+}
+int camera_store_meta_data_in_buffers(struct camera_device * device, int enable)
+{
+	LOGD("%s", __FUNCTION__);
+	return 0;
+}
+int camera_dump(struct camera_device * device, int fd)
+{
+	LOGD("%s", __FUNCTION__);
+	android::Vector<android::String16> args;
+	return camObj->dump(fd, args);
+}
+int camera_start_recording(struct camera_device * device)
+{
+	LOGD("%s", __FUNCTION__);
+	camObj->startRecording();
+	return 0;
+}
+void camera_stop_recording(struct camera_device * device)
+{
+	LOGD("%s", __FUNCTION__);
+	camObj->stopRecording();
+}
+int camera_recording_enabled(struct camera_device * device)
+{
+	LOGD("%s", __FUNCTION__);
+	return (int)camObj->recordingEnabled();
+}
+void camera_release_recording_frame(struct camera_device * device, const void *opaque)
+{
+	
+	LOGD("%s", __FUNCTION__);
+}
+
+
+int camera_dequeue_buffer(struct preview_stream_ops* w, buffer_handle_t** buffer, int *stride)
+{
+	LOGE("%s", __FUNCTION__);
+	return 0;
+}
+
+int camera_enqueue_buffer(struct preview_stream_ops* w, buffer_handle_t* buffer)
+{
+	LOGE("%s", __FUNCTION__);
+	return 0;
+}
+int camera_cancel_buffer(struct preview_stream_ops* w, buffer_handle_t* buffer)
+{
+	LOGE("%s", __FUNCTION__);
+	return 0;
+}
+int camera_set_buffer_count(struct preview_stream_ops* w, int count)
+{
+	LOGE("%s", __FUNCTION__);
+	return 0;
+}
+int camera_set_buffers_geometry(struct preview_stream_ops* pw, int w, int h, int format)
+{
+	LOGE("%s", __FUNCTION__);
+	return 0;
+}
+int camera_set_crop(struct preview_stream_ops *w,  int left, int top, int right, int bottom)
+{
+	LOGE("%s", __FUNCTION__);
+	return 0;
+}
+int camera_set_usage(struct preview_stream_ops* w, int usage)
+{
+	LOGE("%s", __FUNCTION__);
+	return 0;
+}
+int camera_set_swap_interval(struct preview_stream_ops *w, int interval)
+{
+	LOGE("%s", __FUNCTION__);
+	return 0;
+}
+int camera_get_min_undequeued_buffer_count(const struct preview_stream_ops *w, int *count)
+{
+	LOGE("%s", __FUNCTION__);
+	return 0;
+}
+int camera_lock_buffer(struct preview_stream_ops* w, buffer_handle_t* buffer)
+{
+	LOGE("%s", __FUNCTION__);
+	return 0;
+}
+

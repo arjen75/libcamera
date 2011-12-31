@@ -41,191 +41,6 @@ extern "C" {
 #include <msm_camera.h>
 }
 
-// Mix and match AOSP/CYANOGEN
-const char KEY_PREVIEW_SIZE[] = "preview-size";
-const char KEY_SUPPORTED_PREVIEW_SIZES[] = "preview-size-values";
-const char KEY_PREVIEW_FORMAT[] = "preview-format";
-const char KEY_SUPPORTED_PREVIEW_FORMATS[] = "preview-format-values";
-const char KEY_PREVIEW_FRAME_RATE[] = "preview-frame-rate";
-const char KEY_SUPPORTED_PREVIEW_FRAME_RATES[] = "preview-frame-rate-values";
-const char KEY_PREVIEW_FPS_RANGE[] = "preview-fps-range";
-const char KEY_SUPPORTED_PREVIEW_FPS_RANGE[] = "preview-fps-range-values";
-const char KEY_PICTURE_SIZE[] = "picture-size";
-const char KEY_SUPPORTED_PICTURE_SIZES[] = "picture-size-values";
-const char KEY_PICTURE_FORMAT[] = "picture-format";
-const char KEY_SUPPORTED_PICTURE_FORMATS[] = "picture-format-values";
-const char KEY_JPEG_THUMBNAIL_WIDTH[] = "jpeg-thumbnail-width";
-const char KEY_JPEG_THUMBNAIL_HEIGHT[] = "jpeg-thumbnail-height";
-const char KEY_SUPPORTED_JPEG_THUMBNAIL_SIZES[] = "jpeg-thumbnail-size-values";
-const char KEY_JPEG_THUMBNAIL_QUALITY[] = "jpeg-thumbnail-quality";
-const char KEY_JPEG_QUALITY[] = "jpeg-quality";
-const char KEY_ROTATION[] = "rotation";
-const char KEY_GPS_LATITUDE[] = "gps-latitude";
-const char KEY_GPS_LONGITUDE[] = "gps-longitude";
-const char KEY_GPS_ALTITUDE[] = "gps-altitude";
-const char KEY_GPS_TIMESTAMP[] = "gps-timestamp";
-const char KEY_GPS_PROCESSING_METHOD[] = "gps-processing-method";
-const char KEY_WHITE_BALANCE[] = "whitebalance";
-const char KEY_SUPPORTED_WHITE_BALANCE[] = "whitebalance-values";
-const char KEY_EFFECT[] = "effect";
-const char KEY_SUPPORTED_EFFECTS[] = "effect-values";
-const char KEY_ANTIBANDING[] = "antibanding";
-const char KEY_SUPPORTED_ANTIBANDING[] = "antibanding-values";
-const char KEY_SCENE_MODE[] = "scene-mode";
-const char KEY_SUPPORTED_SCENE_MODES[] = "scene-mode-values";
-const char KEY_FLASH_MODE[] = "flash-mode";
-const char KEY_SUPPORTED_FLASH_MODES[] = "flash-mode-values";
-const char KEY_FOCUS_MODE[] = "focus-mode";
-const char KEY_SUPPORTED_FOCUS_MODES[] = "focus-mode-values";
-const char KEY_MAX_NUM_FOCUS_AREAS[] = "max-num-focus-areas";
-const char KEY_FOCUS_AREAS[] = "focus-areas";
-const char KEY_FOCAL_LENGTH[] = "focal-length";
-const char KEY_HORIZONTAL_VIEW_ANGLE[] = "horizontal-view-angle";
-const char KEY_VERTICAL_VIEW_ANGLE[] = "vertical-view-angle";
-const char KEY_SUPPORTED_AUTO_EXPOSURE[] = "auto-exposure-values";
-const char KEY_EXPOSURE_COMPENSATION[] = "exposure-compensation";
-const char KEY_MAX_EXPOSURE_COMPENSATION[] = "max-exposure-compensation";
-const char KEY_MIN_EXPOSURE_COMPENSATION[] = "min-exposure-compensation";
-const char KEY_EXPOSURE_COMPENSATION_STEP[] = "exposure-compensation-step";
-const char KEY_AUTO_EXPOSURE[] = "auto-exposure";
-const char KEY_AUTO_EXPOSURE_LOCK[] = "auto-exposure-lock";
-const char KEY_AUTO_EXPOSURE_LOCK_SUPPORTED[] = "auto-exposure-lock-supported";
-const char AUTO_EXPOSURE_FRAME_AVG[] = "frame-average";
-const char AUTO_EXPOSURE_CENTER_WEIGHTED[] = "center-weighted";
-const char AUTO_EXPOSURE_SPOT_METERING[] = "spot-metering";
- // Values for ISO Settings
-const char ISO_AUTO[] = "auto";
-const char ISO_HJR[] = "ISO_HJR";
-const char ISO_100[] = "ISO100";
-const char ISO_200[] = "ISO200";
-const char ISO_400[] = "ISO400";
-const char ISO_800[] = "ISO800";
-const char ISO_1600[] = "ISO1600";
-
- //Values for Lens Shading
-const char LENSSHADE_ENABLE[] = "enable";
-const char LENSSHADE_DISABLE[] = "disable";
-
-const char KEY_ISO_MODE[] = "iso";
-const char KEY_SUPPORTED_ISO_MODES[] = "iso-mode-values";
-const char KEY_LENSSHADE[] = "lensshade";
-const char KEY_SUPPORTED_LENSSHADE_MODES[] = "lensshade-values";
-const char KEY_SHARPNESS[] = "sharpness";
-const char KEY_MAX_SHARPNESS[] = "max-sharpness";
-const char KEY_CONTRAST[] = "contrast";
-const char KEY_MAX_CONTRAST[] = "max-contrast";
-const char KEY_SATURATION[] = "saturation";
-const char KEY_MAX_SATURATION[] = "max-saturation";
-
-const char KEY_GPS_LATITUDE_REF[] = "gps-latitude-ref";
-const char KEY_GPS_LONGITUDE_REF[] = "gps-longitude-ref";
-const char KEY_GPS_ALTITUDE_REF[] = "gps-altitude-ref";
-const char KEY_GPS_STATUS[] = "gps-status";
-const char KEY_EXIF_DATETIME[] = "exif-datetime";
-
-const char KEY_AUTO_WHITEBALANCE_LOCK[] = "auto-whitebalance-lock";
-const char KEY_AUTO_WHITEBALANCE_LOCK_SUPPORTED[] = "auto-whitebalance-lock-supported";
-const char KEY_MAX_NUM_METERING_AREAS[] = "max-num-metering-areas";
-const char KEY_METERING_AREAS[] = "metering-areas";
-const char KEY_ZOOM[] = "zoom";
-const char KEY_MAX_ZOOM[] = "max-zoom";
-const char KEY_ZOOM_RATIOS[] = "zoom-ratios";
-const char KEY_ZOOM_SUPPORTED[] = "zoom-supported";
-const char KEY_SMOOTH_ZOOM_SUPPORTED[] = "smooth-zoom-supported";
-const char KEY_FOCUS_DISTANCES[] = "focus-distances";
-const char KEY_VIDEO_FRAME_FORMAT[] = "video-frame-format";
-const char KEY_VIDEO_SIZE[] = "video-size";
-const char KEY_SUPPORTED_VIDEO_SIZES[] = "video-size-values";
-const char KEY_PREFERRED_PREVIEW_SIZE_FOR_VIDEO[] = "preferred-preview-size-for-video";
-const char KEY_MAX_NUM_DETECTED_FACES_HW[] = "max-num-detected-faces-hw";
-const char KEY_MAX_NUM_DETECTED_FACES_SW[] = "max-num-detected-faces-sw";
-const char KEY_RECORDING_HINT[] = "recording-hint";
-const char KEY_VIDEO_SNAPSHOT_SUPPORTED[] = "video-snapshot-supported";
-const char KEY_VIDEO_STABILIZATION[] = "video-stabilization";
-const char KEY_VIDEO_STABILIZATION_SUPPORTED[] = "video-stabilization-supported";
-
-const char TRUE[] = "true";
-const char FALSE[] = "false";
-const char FOCUS_DISTANCE_INFINITY[] = "Infinity";
-
-// Values for white balance settings.
-const char WHITE_BALANCE_AUTO[] = "auto";
-const char WHITE_BALANCE_INCANDESCENT[] = "incandescent";
-const char WHITE_BALANCE_FLUORESCENT[] = "fluorescent";
-const char WHITE_BALANCE_WARM_FLUORESCENT[] = "warm-fluorescent";
-const char WHITE_BALANCE_DAYLIGHT[] = "daylight";
-const char WHITE_BALANCE_CLOUDY_DAYLIGHT[] = "cloudy-daylight";
-const char WHITE_BALANCE_TWILIGHT[] = "twilight";
-const char WHITE_BALANCE_SHADE[] = "shade";
-
-// Values for effect settings.
-const char EFFECT_NONE[] = "none";
-const char EFFECT_MONO[] = "mono";
-const char EFFECT_NEGATIVE[] = "negative";
-const char EFFECT_SOLARIZE[] = "solarize";
-const char EFFECT_SEPIA[] = "sepia";
-const char EFFECT_POSTERIZE[] = "posterize";
-const char EFFECT_WHITEBOARD[] = "whiteboard";
-const char EFFECT_BLACKBOARD[] = "blackboard";
-const char EFFECT_AQUA[] = "aqua";
-
-// Values for antibanding settings.
-const char ANTIBANDING_AUTO[] = "auto";
-const char ANTIBANDING_50HZ[] = "50hz";
-const char ANTIBANDING_60HZ[] = "60hz";
-const char ANTIBANDING_OFF[] = "off";
-
-// Values for flash mode settings.
-const char FLASH_MODE_OFF[] = "off";
-const char FLASH_MODE_AUTO[] = "auto";
-const char FLASH_MODE_ON[] = "on";
-const char FLASH_MODE_RED_EYE[] = "red-eye";
-const char FLASH_MODE_TORCH[] = "torch";
-
-// Values for scene mode settings.
-const char SCENE_MODE_AUTO[] = "auto";
-const char SCENE_MODE_ACTION[] = "action";
-const char SCENE_MODE_PORTRAIT[] = "portrait";
-const char SCENE_MODE_LANDSCAPE[] = "landscape";
-const char SCENE_MODE_NIGHT[] = "night";
-const char SCENE_MODE_NIGHT_PORTRAIT[] = "night-portrait";
-const char SCENE_MODE_THEATRE[] = "theatre";
-const char SCENE_MODE_BEACH[] = "beach";
-const char SCENE_MODE_SNOW[] = "snow";
-const char SCENE_MODE_SUNSET[] = "sunset";
-const char SCENE_MODE_STEADYPHOTO[] = "steadyphoto";
-const char SCENE_MODE_FIREWORKS[] = "fireworks";
-const char SCENE_MODE_SPORTS[] = "sports";
-const char SCENE_MODE_PARTY[] = "party";
-const char SCENE_MODE_CANDLELIGHT[] = "candlelight";
-const char SCENE_MODE_BARCODE[] = "barcode";
-
-const char PIXEL_FORMAT_YUV422SP[] = "yuv422sp";
-const char PIXEL_FORMAT_YUV420SP[] = "yuv420sp";
-const char PIXEL_FORMAT_YUV422I[] = "yuv422i-yuyv";
-const char PIXEL_FORMAT_YUV420P[]  = "yuv420p";
-const char PIXEL_FORMAT_RGB565[] = "rgb565";
-const char PIXEL_FORMAT_RGBA8888[] = "rgba8888";
-const char PIXEL_FORMAT_JPEG[] = "jpeg";
-const char PIXEL_FORMAT_RAW[] = "raw";
-const char PIXEL_FORMAT_BAYER_RGGB[] = "bayer-rggb";
-
-// Values for focus mode settings.
-const char FOCUS_MODE_AUTO[] = "auto";
-const char FOCUS_MODE_NORMAL[] = "normal";
-const char FOCUS_MODE_INFINITY[] = "infinity";
-const char FOCUS_MODE_MACRO[] = "macro";
-const char FOCUS_MODE_FIXED[] = "fixed";
-const char FOCUS_MODE_EDOF[] = "edof";
-const char FOCUS_MODE_CONTINUOUS_VIDEO[] = "continuous-video";
-const char FOCUS_MODE_CONTINUOUS_PICTURE[] = "continuous-picture";
-
-typedef struct image_rect_struct
-{
-  uint32_t width;      /* Image width */
-  uint32_t height;     /* Image height */
-} image_rect_type;
-
 struct str_map {
     const char *const desc;
     int val;
@@ -244,7 +59,7 @@ struct target_map {
     targetType targetEnum;
 };
 
-struct board_property {
+struct board_property{
     targetType target;
     unsigned int previewSizeMask;
 };
@@ -252,6 +67,7 @@ struct board_property {
 /* Values originally in proprietary headers */
 
 #define MSM_CAMERA_CONTROL "/dev/msm_camera/control0"
+#define MSM_CAMERA_CONFIG "/dev/msm_camera/config0"
 
 #define TRUE 1
 #define FALSE 0
@@ -259,17 +75,16 @@ struct board_property {
 #define CAMERA_MIN_CONTRAST 0
 #define CAMERA_MAX_CONTRAST 4
 #define CAMERA_MIN_SHARPNESS 0
-#define CAMERA_MIN_EXPOSURE_COMPENSATION -2
+#define CAMERA_MIN_EXPOSURE_COMPENSATION 0
 #define CAMERA_MAX_SHARPNESS 4
 #define CAMERA_MIN_SATURATION 0
 #define CAMERA_MAX_SATURATION 4
-#define CAMERA_MAX_EXPOSURE_COMPENSATION 2
+#define CAMERA_MAX_EXPOSURE_COMPENSATION 8
 #define CAMERA_DEF_SHARPNESS 2
-#define CAMERA_DEF_CONTRAST 2
+#define CAMERA_DEF_CONTRAST 3
 #define CAMERA_DEF_SATURATION 2
-#define CAMERA_DEF_EXPOSURE_COMPENSATION "0"
-#define CAMERA_EXPOSURE_COMPENSATION_STEP 1
-#define CAMERA_ERROR_UKNOWN 1
+#define CAMERA_DEF_EXPOSURE_COMPENSATION "2.0"
+#define CAMERA_EXPOSURE_COMPENSATION_STEP 2
 
 #define CEILING16(x) (x&0xfffffff0)
 #define PAD_TO_WORD(x) ((x&1) ? x+1 : x)
@@ -280,9 +95,6 @@ struct board_property {
 #define MINIMUM_FPS 10
 #define DEFAULT_FPS 15
 #define MAXIMUM_FPS 25
-
-// was 4
-#define NUM_PREVIEW_BUFFERS 4
 
 typedef struct {
 	unsigned int in1_w;
@@ -556,13 +368,11 @@ public:
     virtual sp<IMemoryHeap> getPreviewHeap() const;
     virtual sp<IMemoryHeap> getRawHeap() const;
 
-virtual void setCallbacks(struct camera_device * device,
-							camera_notify_callback notify_cb,
-							camera_data_callback data_cb, 
-							camera_data_timestamp_callback data_cb_timestamp,
-							camera_request_memory get_memory,
-							void *user);
-	virtual void enableMsgType(int32_t msgType);
+    virtual void setCallbacks(notify_callback notify_cb,
+                              data_callback data_cb,
+                              data_callback_timestamp data_cb_timestamp,
+                              void* user);
+    virtual void enableMsgType(int32_t msgType);
     virtual void disableMsgType(int32_t msgType);
     virtual bool msgTypeEnabled(int32_t msgType);
 
@@ -585,7 +395,7 @@ virtual void setCallbacks(struct camera_device * device,
 
     virtual void release();
     virtual bool useOverlay();
-    //virtual status_t setOverlay(const sp<Overlay> &overlay);
+    virtual status_t setOverlay(const sp<Overlay> &overlay);
 
     static sp<CameraHardwareInterface> createInstance();
     static sp<QualcommCameraHardware> getInstance();
@@ -597,9 +407,6 @@ virtual void setCallbacks(struct camera_device * device,
     void receiveJpegPictureFragment(uint8_t *buf, uint32_t size);
     void notifyShutter(common_crop_t *crop);
     void receive_camframetimeout();
-	
-
-
 
 private:
     QualcommCameraHardware();
@@ -611,7 +418,7 @@ private:
     status_t cancelAutoFocusInternal();
     bool native_set_dimension (int camfd);
     bool native_jpeg_encode (void);
-    bool native_set_parm(int mCameraControlFd, cam_ctrl_type type, uint16_t length, void *value);
+    bool native_set_parm(cam_ctrl_type type, uint16_t length, void *value);
     bool native_zoom_image(int fd, int srcOffset, int dstOffset, common_crop_t *crop);
 
     static wp<QualcommCameraHardware> singleton;
@@ -629,7 +436,7 @@ private:
     CameraParameters mParameters;
     unsigned int frame_size;
     bool mCameraRunning;
-    android::Mutex mCameraRunningLock;
+    Mutex mCameraRunningLock;
     bool mPreviewInitialized;
 
     // This class represents a heap which maintains several contiguous
@@ -687,6 +494,7 @@ private:
     sp<PmemPool> mDisplayHeap;
     sp<AshmemPool> mJpegHeap;
     sp<PmemPool> mRawSnapShotPmemHeap;
+    sp<AshmemPool> mRawSnapshotAshmemHeap;
     sp<PmemPool> mPostViewHeap;
 
 
@@ -819,32 +627,20 @@ private:
     struct msm_frame *recordframes;
     bool mInPreviewCallback;
     bool mUseOverlay;
-    //sp<Overlay>  mOverlay;
+    sp<Overlay>  mOverlay;
 
     int32_t mMsgEnabled;    // camera msg to be handled
-    camera_notify_callback mNotifyCallback;
-    camera_data_callback mDataCallback;
-    camera_data_timestamp_callback mDataCallbackTimestamp;
-	camera_request_memory mMemoryCallback;
+    notify_callback mNotifyCallback;
+    data_callback mDataCallback;
+    data_callback_timestamp mDataCallbackTimestamp;
     void *mCallbackCookie;  // same for all callbacks
     int mDebugFps;
     int kPreviewBufferCountActual;
     int previewWidth, previewHeight;
-	
-	camera_memory_t * cameraData;
-	
-	void * tmpMem;
-
-
-	
-
-	
-	
 };
 
 }; // namespace android
 
-	
 // ICS HAL stuff
 
 static int camera_get_number_of_cameras(void);
@@ -904,8 +700,8 @@ camera_module_t HAL_MODULE_INFO_SYM = {
 		 version_major: 1,
 		 version_minor: 0,
 		 id: CAMERA_HARDWARE_MODULE_ID,
-		 name: "Camera HAL skeleton module for ICS",
-		 author: "Ivan Zupan",
+		 name: "Camera HAL  module for ICS Running on LG Optimus",
+		 author: "Ivan Zupan&Mike Gapinski",
 		 methods: &camera_module_methods,
 		 dso: NULL,
 		 reserved: {0},

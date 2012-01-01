@@ -2,7 +2,6 @@
 ** Copyright 2008, Google Inc.
 ** Copyright (c) 2009, Code Aurora Forum. All rights reserved.
 ** Copyright (c) 2010, Ricardo Cerqueira
-** Copyright (c) 2011, Ivan Zupan
 **
 ** Licensed under the Apache License, Version 2.0 (the "License");
 ** you may not use this file except in compliance with the License.
@@ -28,13 +27,11 @@
 #ifndef ANDROID_HARDWARE_QUALCOMM_CAMERA_HARDWARE_H
 #define ANDROID_HARDWARE_QUALCOMM_CAMERA_HARDWARE_H
 
-#include <CameraHardwareInterface.h>
+#include <camera/CameraHardwareInterface.h>
 #include <binder/MemoryBase.h>
 #include <binder/MemoryHeapBase.h>
 #include <stdint.h>
-
-#include <utils/threads.h>
-#include <camera/CameraParameters.h>
+#include <ui/Overlay.h>
 
 extern "C" {
 #include <linux/android_pmem.h>
@@ -395,7 +392,7 @@ public:
 
     virtual void release();
     virtual bool useOverlay();
-//    virtual status_t setOverlay(const sp<Overlay> &overlay);
+    virtual status_t setOverlay(const sp<Overlay> &overlay);
 
     static sp<CameraHardwareInterface> createInstance();
     static sp<QualcommCameraHardware> getInstance();
@@ -627,7 +624,7 @@ private:
     struct msm_frame *recordframes;
     bool mInPreviewCallback;
     bool mUseOverlay;
-//    sp<Overlay>  mOverlay;
+    sp<Overlay>  mOverlay;
 
     int32_t mMsgEnabled;    // camera msg to be handled
     notify_callback mNotifyCallback;
@@ -640,75 +637,5 @@ private:
 };
 
 }; // namespace android
-
-// ICS HAL stuff
-
-static int camera_get_number_of_cameras(void);
-static int camera_get_camera_info(int camera_id, struct camera_info *info);
-static int camera_device_open(const hw_module_t* module, const char* name, hw_device_t** device);
-static int camera_device_close(hw_device_t* device);
-static int camera_start_preview(struct camera_device * device);
-static char* camera_get_parameters(struct camera_device * device);
-static void camera_put_parameters(struct camera_device *device, char *parms);
-static int camera_set_parameters(struct camera_device * device, const char *params);
-static int camera_send_command(struct camera_device * device, int32_t cmd, int32_t arg1, int32_t arg2);
-static int camera_set_preview_window(struct camera_device * device, struct preview_stream_ops *window);
-static void camera_stop_preview(struct camera_device * device);
-static int camera_auto_focus(struct camera_device * device);
-static int camera_cancel_auto_focus(struct camera_device * device);
-static int camera_take_picture(struct camera_device * device);
-static int camera_cancel_picture(struct camera_device * device);
-static void camera_set_callbacks(struct camera_device * device, camera_notify_callback notify_cb,    camera_data_callback data_cb,       camera_data_timestamp_callback data_cb_timestamp,        camera_request_memory get_memory,        void *user);
-static int camera_preview_enabled(struct camera_device * device);
-static void camera_enable_msg_type(struct camera_device * device, int32_t msg_type);
-static void camera_disable_msg_type(struct camera_device * device, int32_t msg_type);
-static int camera_msg_type_enabled(struct camera_device * device, int32_t msg_type);
-static void camera_release(struct camera_device * device);
-static int camera_store_meta_data_in_buffers(struct camera_device * device, int enable);
-static int camera_dump(struct camera_device * device, int fd);
-static int camera_start_recording(struct camera_device * device);
-static void camera_stop_recording(struct camera_device * device);
-static int camera_recording_enabled(struct camera_device * device);
-static void camera_release_recording_frame(struct camera_device * device, const void *opaque);
-
-// preview ops
-static int camera_dequeue_buffer(struct preview_stream_ops* w, buffer_handle_t** buffer, int *stride);
-static int camera_enqueue_buffer(struct preview_stream_ops* w, buffer_handle_t* buffer);
-static int camera_cancel_buffer(struct preview_stream_ops* w, buffer_handle_t* buffer);
-static int camera_set_buffer_count(struct preview_stream_ops* w, int count);
-static int camera_set_buffers_geometry(struct preview_stream_ops* pw, int w, int h, int format);
-static int camera_set_crop(struct preview_stream_ops *w,  int left, int top, int right, int bottom);
-static int camera_set_usage(struct preview_stream_ops* w, int usage);
-static int camera_set_swap_interval(struct preview_stream_ops *w, int interval);
-static int camera_get_min_undequeued_buffer_count(const struct preview_stream_ops *w, int *count);
-static int camera_lock_buffer(struct preview_stream_ops* w, buffer_handle_t* buffer);
-
-
-// TODO: try casting this again
-static android::sp<android::QualcommCameraHardware> camObj;
-static android::sp<android::CameraHardwareInterface> tmpObj;
-static void * dlHandle;
-
-
-static struct hw_module_methods_t camera_module_methods = {
-		open: camera_device_open
-};
-
-camera_module_t HAL_MODULE_INFO_SYM = {
-	common: {
-		 tag: HARDWARE_MODULE_TAG,
-		 version_major: 1,
-		 version_minor: 0,
-		 id: CAMERA_HARDWARE_MODULE_ID,
-		 name: "Camera HAL skeleton module for ICS",
-		 author: "Ivan Zupan",
-		 methods: &camera_module_methods,
-		 dso: NULL,
-		 reserved: {0},
-	},
-	get_number_of_cameras: camera_get_number_of_cameras,
-	get_camera_info: camera_get_camera_info,
-};		
-
 
 #endif

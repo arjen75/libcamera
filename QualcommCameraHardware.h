@@ -96,6 +96,9 @@ struct board_property{
 #define DEFAULT_FPS 15
 #define MAXIMUM_FPS 25
 
+// was 4
+#define NUM_PREVIEW_BUFFERS 4
+
 typedef struct {
 	unsigned int in1_w;
 	unsigned int in1_h;

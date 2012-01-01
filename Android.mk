@@ -12,7 +12,7 @@ LOCAL_LDLIBS := -llog -ldl
 LOCAL_MODULE    := camera.swift
 LOCAL_SRC_FILES := QualcommCameraHardware.cpp
 LOCAL_PRELINK_MODULE := false
-LOCAL_SHARED_LIBRARIES:= liblog libdl libutils libcamera_client libcamera libbinder libcutils
+LOCAL_SHARED_LIBRARIES:= liblog libdl libutils libcamera_client liboemcamera libbinder libcutils
 
 
 

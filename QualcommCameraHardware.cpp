@@ -3554,9 +3554,9 @@ void QualcommCameraHardware::notifyShutter(common_crop_t *crop)
     image_rect_type size;
 
     if (mShutterPending && mNotifyCallback && (mMsgEnabled & CAMERA_MSG_SHUTTER)) {
-        LOGV("out2_w=%d, out2_h=%d, in2_w=%d, in2_h=%d",
+        LOGD("out2_w=%d, out2_h=%d, in2_w=%d, in2_h=%d",
              crop->out2_w, crop->out2_h, crop->in2_w, crop->in2_h);
-        LOGV("out1_w=%d, out1_h=%d, in1_w=%d, in1_h=%d",
+        LOGD("out1_w=%d, out1_h=%d, in1_w=%d, in1_h=%d",
              crop->out1_w, crop->out1_h, crop->in1_w, crop->in1_h);
 
         // To workaround a bug in MDP which happens if either
@@ -3592,8 +3592,8 @@ void QualcommCameraHardware::notifyShutter(common_crop_t *crop)
 
 static void receive_shutter_callback(common_crop_t *crop)
 {
-    LOGV("receive_shutter_callback: E");
-    LOGV("receive_shutter_callback: X");
+    LOGD("receive_shutter_callback: E");
+    LOGD("receive_shutter_callback: X");
 }
 
 // Crop the picture in place.
@@ -3683,7 +3683,7 @@ void QualcommCameraHardware::receiveRawSnapshot(){
 
 void QualcommCameraHardware::receiveRawPicture()
 {
-    LOGV("receiveRawPicture: E");
+    LOGD("receiveRawPicture: E");
 
     Mutex::Autolock cbLock(&mCallbackLock);
     if (mDataCallback && (mMsgEnabled & CAMERA_MSG_RAW_IMAGE)) {
@@ -3725,11 +3725,26 @@ void QualcommCameraHardware::receiveRawPicture()
             notifyShutter(&mCrop);
         }
 
+			// Get the memory we want
+			camera_memory_t * cameraData = mMemoryCallback(-1, mDisplayHeap->mBufferSize, 1, mCallbackCookie);
+			ssize_t  frameOffset;
+			size_t  frameSize;
+			 mDisplayHeap->mBuffers[0]->getMemory(&frameOffset, &frameSize);
+				
+			 memcpy(cameraData->data,   (void*) frameOffset, frameSize);
+
+			
+			camera_frame_metadata_t * metaData  = (camera_frame_metadata_t*)malloc(sizeof(*metaData));
+			memset(metaData, 0, sizeof(*metaData));
+			// This camera doesn't do face detection
+			metaData->number_of_faces = 0;
+			metaData->faces = NULL;							   
+
+		
    if (mDataCallback && (mMsgEnabled & CAMERA_MSG_RAW_IMAGE))
-       mDataCallback(CAMERA_MSG_RAW_IMAGE, mDisplayHeap->mBuffers[0],
-                            mCallbackCookie);
+		mDataCallback(CAMERA_MSG_COMPRESSED_IMAGE, cameraData,0,metaData, mCallbackCookie);	
     }
-    else LOGV("Raw-picture callback was canceled--skipping.");
+    else LOGD("Raw-picture callback was canceled--skipping.");
 
     if (mDataCallback && (mMsgEnabled & CAMERA_MSG_COMPRESSED_IMAGE)) {
         mJpegSize = 0;
@@ -3738,7 +3753,7 @@ void QualcommCameraHardware::receiveRawPicture()
             mJpegThreadRunning = true;
             mJpegThreadWaitLock.unlock();
             if(native_jpeg_encode()) {
-                LOGV("receiveRawPicture: X (success)");
+                LOGD("receiveRawPicture: X (success)");
                 return;
             }
             LOGE("jpeg encoding failed");
@@ -3748,33 +3763,14 @@ void QualcommCameraHardware::receiveRawPicture()
             mJpegThreadWaitLock.unlock();
         }
     }
-    else LOGV("JPEG callback is NULL, not encoding image.");
+    else LOGD("JPEG callback is NULL, not encoding image.");
     deinitRaw();
-    LOGV("receiveRawPicture: X");
-}
-
-void QualcommCameraHardware::receiveJpegPictureFragment(
-    uint8_t *buff_ptr, uint32_t buff_size)
-{
-    uint32_t remaining = mJpegHeap->mHeap->virtualSize();
-    remaining -= mJpegSize;
-    uint8_t *base = (uint8_t *)mJpegHeap->mHeap->base();
-
-    LOGV("receiveJpegPictureFragment size %d", buff_size);
-    if (buff_size > remaining) {
-        LOGE("receiveJpegPictureFragment: size %d exceeds what "
-             "remains in JPEG heap (%d), truncating",
-             buff_size,
-             remaining);
-        buff_size = remaining;
-    }
-    memcpy(base + mJpegSize, buff_ptr, buff_size);
-    mJpegSize += buff_size;
+    LOGD("receiveRawPicture: X");
 }
 
 void QualcommCameraHardware::receiveJpegPicture(void)
 {
-    LOGV("receiveJpegPicture: E image (%d uint8_ts out of %d)",
+    LOGD("receiveJpegPicture: E image (%d uint8_ts out of %d)",
          mJpegSize, mJpegHeap->mBufferSize);
     Mutex::Autolock cbLock(&mCallbackLock);
 
@@ -3784,22 +3780,47 @@ void QualcommCameraHardware::receiveJpegPicture(void)
         // The reason we do not allocate into mJpegHeap->mBuffers[offset] is
         // that the JPEG image's size will probably change from one snapshot
         // to the next, so we cannot reuse the MemoryBase object.
-        sp<MemoryBase> buffer = new
+       /* sp<MemoryBase> buffer = new
             MemoryBase(mJpegHeap->mHeap,
                        index * mJpegHeap->mBufferSize +
                        0,
-                       mJpegSize);
-        mDataCallback(CAMERA_MSG_COMPRESSED_IMAGE, buffer, mCallbackCookie);
-        buffer = NULL;
+                       mJpegSize);*/
+					   LOGD("receiveJpegPicture: 1");
+			// Get the memory we want
+			  cameraData = mMemoryCallback(-1,  mJpegSize, 1, mCallbackCookie);
+			/*ssize_t  frameOffset;
+			size_t  frameSize;
+			LOGD("receiveJpegPicture: buffer getmem end");
+			buffer->getMemory(&frameOffset, &frameSize);
+				LOGD("receiveJpegPicture: getMemory end");
+				*/
+				
+				//THIS IS RETURNING GREEN??  proably due to the wrong /dev/device
+				LOGD("receiveJpegPicture: 2");
+				memcpy(cameraData->data,   (void*) mJpegHeap->mHeap->getBase(), mJpegSize);
+				LOGD("receiveJpegPicture: 2 jpegsize: %d",mJpegSize);
+				//memcpy(cameraData->data,   tmpMem, mJpegSize);
+				//free(tmpMem);
+			 //memcpy(cameraData->data,   (void*) mJpegHeap->mHeap->base(), mJpegSize);
+			LOGD("receiveJpegPicture: memcpy end");
+			
+			camera_frame_metadata_t * metaData  = (camera_frame_metadata_t*)malloc(sizeof(*metaData));
+			memset(metaData, 0, sizeof(*metaData));
+			// This camera doesn't do face detection
+			metaData->number_of_faces = 0;
+			metaData->faces = NULL;							   
+			LOGD("receiveJpegPicture: before callback %p", mDataCallback);
+        mDataCallback(CAMERA_MSG_COMPRESSED_IMAGE, cameraData,0,metaData, mCallbackCookie);
+       // buffer = NULL;
     }
-    else LOGV("JPEG callback was cancelled--not delivering image.");
+    else LOGD("JPEG callback was cancelled--not delivering image.");
 
     mJpegThreadWaitLock.lock();
     mJpegThreadRunning = false;
     mJpegThreadWait.signal();
     mJpegThreadWaitLock.unlock();
 
-    LOGV("receiveJpegPicture: X callback done.");
+    LOGD("receiveJpegPicture: X callback done.");
 }
 
 bool QualcommCameraHardware::previewEnabled()
